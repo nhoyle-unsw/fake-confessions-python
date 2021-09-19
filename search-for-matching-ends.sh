@@ -1,0 +1,1 @@
+lines=1000; characters=9; columns=$((65-$characters)); head -${lines} confession_real_hashes.txt | cut -c${columns}- | awk '{print $0 "$"}' > example_hashes_${lines}_${characters}.txt; date; grep -f example_hashes_${lines}_${characters}.txt confession_fake_hashes.txt; date
