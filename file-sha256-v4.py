@@ -14,6 +14,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("filename", help="The name of the file to hash attack")
 parser.add_argument("-d", "--debug", action="store_true",
                     help="Output debug statements (you need to press Enter to see each line of the output)")
+parser.add_argument("-b", "--binary-pattern", action="store_true",
+                    help="Include the binary pattern in the output. The binary pattern is used to insert spaces in the file lines (note the binary pattern starts at the bottom of the file, a 1 is a space 0 is do nothing)")
 parser.add_argument("-v", "--verbose", help="increase output verbosity",
                     action="store_true")
 args = parser.parse_args()
@@ -122,8 +124,10 @@ def main():
                "binary_pattern:", binary_pattern, "\n")
         printd("File content: start[" + updated_file_content + "]end")
         new_file_hash = sha256_string(updated_file_content)
-        #print(binary_pattern, new_file_hash)
-        print(new_file_hash)
+        if args.binary_pattern:
+            print(binary_pattern, new_file_hash)
+        else:
+            print(new_file_hash)
         if file_version == 0 and not is_matching_an_original_file_hash(new_file_hash):
             eprint("ERROR: file does not match and original file hash. originals:", )
             exit(1)
