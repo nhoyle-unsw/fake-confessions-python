@@ -99,15 +99,17 @@ def main():
         eprint(REAL_FILENAME, REAL_FILE_SHA256)
         eprint(FAKE_FILENAME, FAKE_FILE_SHA256)
         exit(1)
-    real_file_line_count = file_contents.count('\n')
-    for file_version in range(2 ** real_file_line_count):
+    file_line_count = file_contents.count('\n')
+    for file_version in range(2 ** file_line_count):
         global is_debug_iteration
-        is_debug_iteration = file_version == args.iteration_debug
+        is_debug_iteration = args.iteration_debug >= 0
+        if is_debug_iteration:
+            file_version = args.iteration_debug
         binary_pattern = bin(file_version).replace("0b", "")
         printd("-- New File ------------------------------------")
         printd("outer file_version:", file_version,
                "binary_pattern:", binary_pattern)
-        last_line_index = real_file_line_count - 1
+        last_line_index = file_line_count - 1
         updated_file_content = ""
         # https://www.javainterviewpoint.com/iteration-index-in-for-loop-in-python/
         split_lines = file_contents.split("\n")
@@ -125,6 +127,7 @@ def main():
             index += 1
             if index >= len(binary_pattern):
                 break
+        printd("split_lines:", len(split_lines), split_lines)
         updated_file_content = "\n".join(split_lines)
         printd("updated file verison#:", file_version,
                "binary_pattern:", binary_pattern, "\n")
